@@ -41,3 +41,7 @@ face_landmarks('image1.bmp')
 face_landmarks('image2.bmp')
 face_landmarks('image3.bmp')
 face_landmarks('image4.bmp')
+
+def func(a):
+    return a * 2
+    
