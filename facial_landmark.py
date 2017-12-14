@@ -11,8 +11,8 @@ from imutils import face_utils
 def create_rect(rect):
     x = rect.left()
     y = rect.top()
-    w = rect.right() - x
-    h = rect.bottom() - y
+    w = rect.right() - x  #width
+    h = rect.bottom() - y  #height
 
     face_rect = (x, y, w, h)
     return face_rect
