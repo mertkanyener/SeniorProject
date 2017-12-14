@@ -7,6 +7,7 @@ import sys
 from imutils import face_utils
 
 
+# a simple function to create a rectangle around the face
 def create_rect(rect):
     x = rect.left()
     y = rect.top()
@@ -19,22 +20,22 @@ def create_rect(rect):
 
 def face_landmarks(image_name):
     try:
-        face_detector = dlib.get_frontal_face_detector()
-        shape_predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
+        face_detector = dlib.get_frontal_face_detector()  #to detect the face shape
+        shape_predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')  # a trained algorithm to predict the face shape
 
         image = cv2.imread(image_name)
 
         rectangles = face_detector(image, 1)
-        shape = 0
+        shape = 0 # giving a default value to prevent errors
         for (i, rectangle) in enumerate(rectangles):
 
             shape = shape_predictor(image, rectangle)
             shape = face_utils.shape_to_np(shape)
             (x, y, w, h) = create_rect(rectangle)
-            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        if type(shape) != int:
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2) # put the face in a rectangle
+        if type(shape) != int: # if shape could not be found
             for (x, y) in shape:
-                cv2.circle(image, (x, y), 1, (0, 0, 255), -1)
+                cv2.circle(image, (x, y), 1, (0, 0, 255), -1)  # marking the face landmarks with red dots
             cv2.imwrite(image_name, image)
         else:
             print(image_name + "-- not processed")
@@ -46,6 +47,7 @@ def face_landmarks(image_name):
         raise
 
 
+# processing the directory
 def landmarks_lib(directory):
     for subdir, dirs, files in os.walk(directory):
         for file in files:
