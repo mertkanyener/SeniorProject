@@ -3,7 +3,7 @@ import cv2
 import os
 
 
-
+# dataset directories needs to be edited according to pc path
 dir1 = "/home/mertkanyener/Desktop/senior_project/dataset_lm/BW_age_18-29_Neutral_bmp/female"
 dir2 = "/home/mertkanyener/Desktop/senior_project/dataset_lm/BW_age_18-29_Neutral_bmp/male"
 dir3 = "/home/mertkanyener/Desktop/senior_project/dataset_lm/BW_age_30-49_Neutral_bmp/female"
@@ -16,6 +16,7 @@ dataset = [dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8]
 
 
 def vectorize(dataset):
+    #an empty list for every age group
     age18_29_f = []
     age18_29_m = []
     age30_49_f = []
@@ -32,7 +33,7 @@ def vectorize(dataset):
             for file in files:
                 img_name = os.path.join(subdir, file)
                 img = cv2.imread(img_name)
-                img_v = np.matrix.flatten(img)
+                img_v = np.matrix.flatten(img)  # vectorizing matrix
                 if count == 1:
                     age18_29_f.append(img_v)
                 elif count == 2:
@@ -51,7 +52,7 @@ def vectorize(dataset):
                     age70_94_m.append(img_v)
 
     arr = np.array([age18_29_f, age18_29_m, age30_49_f, age30_49_m, age50_69_f, age50_69_m, age70_94_f, age70_94_m])
-    m = arr.reshape(4, 2) #result matrix 4 rows for 4 age groups, 2 cols for genders
+    m = arr.reshape(4, 2)  #result matrix 4 rows for 4 age groups, 2 cols for genders
     return m
 
 
