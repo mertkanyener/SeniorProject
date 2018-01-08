@@ -65,8 +65,8 @@ dir7 = "/home/mertkanyener/Desktop/senior_project/dataset_lm/BW_age_70-94_Neutra
 dir8 = "/home/mertkanyener/Desktop/senior_project/dataset_lm/BW_age_70-94_Neutral_bmp/male"
 dataset = [dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8]
 
-for n in dataset:
-    landmarks_lib(n)
+#for n in dataset:
+ #   landmarks_lib(n)
 
 
 
