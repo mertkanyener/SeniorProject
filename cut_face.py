@@ -15,23 +15,19 @@ def cut_face(image_name):
     shape_predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 
     image = cv2.imread(image_name)
-
-    rectangles = face_detector(image, 1)
-    for (i, rectangle) in enumerate(rectangles):
-        shape = shape_predictor(image, rectangle)
+    faces = face_detector(image, 1)  # localizing the face
+    for face in faces:
+        shape = shape_predictor(image, face)  # getting the landmarks
         shape = face_utils.shape_to_np(shape)
         x = shape[1]
         y = shape[25]
         w = shape[16]
         h = shape[9]
-        cv2.rectangle(image, (x[0], y[1] - 20), (w[0], h[1] + 10), (0, 255,0), 2)
-    face = image[(y[1]-20):(h[1]+10), x[0]:w[0]]
 
-    cv2.imshow('img',face)
+    face = image[(y[1]-50):(h[1]+10), x[0]:w[0]] # cutting the interesting area of the face
+    cv2.imwrite('img4_cut.bmp', face)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-
-
-cut_face('img3.bmp')
+cut_face('img4.bmp')
 

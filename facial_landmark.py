@@ -20,20 +20,20 @@ def create_rect(rect):
 
 def face_landmarks(image_name):
     try:
-        face_detector = dlib.get_frontal_face_detector()  #to detect the face shape
+        face_detector = dlib.get_frontal_face_detector()  # to detect the face shape
         shape_predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')  # a trained algorithm to predict the face shape
 
         image = cv2.imread(image_name)
 
-        rectangles = face_detector(image, 1)
+        faces = face_detector(image, 1)
         shape = 0 # giving a default value to prevent errors
-        for (i, rectangle) in enumerate(rectangles):
+        for face in faces:
 
-            shape = shape_predictor(image, rectangle)
+            shape = shape_predictor(image, face)
             shape = face_utils.shape_to_np(shape)
-            (x, y, w, h) = create_rect(rectangle)
+            (x, y, w, h) = create_rect(face)
             cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2) # put the face in a rectangle
-        if type(shape) != int: # if shape could not be found
+        if type(shape) != int:  # if shape could not be found
             for (x, y) in shape:
                 cv2.circle(image, (x, y), 1, (0, 0, 255), -1)  # marking the face landmarks with red dots
             cv2.imwrite(image_name, image)
