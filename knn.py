@@ -20,7 +20,7 @@ X, y = vectorize.vectorize(dataset)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=1, stratify=y)
 
 
-
+print(X_train)
 
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X_train, y_train)
