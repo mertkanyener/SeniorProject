@@ -1,33 +1,26 @@
-import vectorize
-import numpy as np
-
-from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from accuracy import Accuracy
 
 
-dir1 = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_18-29_Neutral_bmp/female"
-dir2 = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_18-29_Neutral_bmp/male"
-dir3 = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_30-49_Neutral_bmp/female"
-dir4 = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_30-49_Neutral_bmp/male"
-dir5 = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_50-69_Neutral_bmp/female"
-dir6 = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_50-69_Neutral_bmp/male"
-dir7 = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_70-94_Neutral_bmp/female"
-dir8 = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_70-94_Neutral_bmp/male"
-dataset = [dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8]
+class Knn:
 
-X, y = vectorize.vectorize(dataset)
+    def __init__(self, neighbors=None):
+        self.neighbors = neighbors
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=1, stratify=y)
+    def run_knn(self, split_data, neighbors=5):
+        X_train, X_test, y_train, y_test = split_data
+        knn = KNeighborsClassifier(n_neighbors=neighbors)
+        knn.fit(X_train, y_train)
+        y_pred = knn.predict(X_test)
+        accuracy = Accuracy()
+        accuracy = accuracy.calc_accuracy(y_pred, y_test)
 
+        #print("y_pred : ", y_pred)
 
-print(X_train)
-
-knn = KNeighborsClassifier(n_neighbors=5)
-knn.fit(X_train, y_train)
-pred = knn.predict(X_test)
+        print("KNN = k : ", neighbors, "Accuracy : %", accuracy)
 
 
 
-#print(accuracy_score(y_test, pred))
+
 
 
