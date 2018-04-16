@@ -8,7 +8,20 @@ class Vectorize:
     def __init__(self, dataset=None):
         self.dataset = dataset
 
-    def vectorize(self, dataset):
+
+    def get_avg_size(self, dataset):
+        x_values = []
+        y_values = []
+        for group in dataset:
+            for subdir, dirs, files in os.walk(group):
+                for file in files:
+                    img_name = os.path.join(subdir, file)
+                    img = cv2.imread(img_name)
+                    x_values.append(img.shape[1])
+                    y_values.append(img.shape[0])
+        return int(np.mean(x_values)), int(np.mean(y_values))
+
+    def vectorize(self, dataset, x_mean, y_mean):
         X = []
         y_gender = []
         y_age = []
@@ -20,6 +33,7 @@ class Vectorize:
                 for file in files:
                     img_name = os.path.join(subdir, file)
                     img = cv2.imread(img_name)
+                    img = cv2.resize(img, (x_mean, y_mean))
                     img_v = np.matrix.flatten(img)  # vectorizing matrix
                     X.append(img_v)
                     if count == 1:

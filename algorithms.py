@@ -19,9 +19,10 @@ dataset = [dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8]
 
 def preprocessing(dataset):
     vectorize = Vectorize()
-    X, y_gender, y_age = vectorize.vectorize(dataset)
-    X_padded = vectorize.padding(X)
-    X_train, X_test, y_train, y_test = train_test_split(X_padded, y_gender, random_state=1, test_size=0.33, stratify=y_gender)
+    x_mean, y_mean = vectorize.get_avg_size(dataset)
+    X, y_gender, y_age = vectorize.vectorize(dataset, x_mean, y_mean)
+    #X_padded = vectorize.padding(X)
+    X_train, X_test, y_train, y_test = train_test_split(X, y_gender, random_state=1, test_size=0.33, stratify=y_gender)
     return X_train, X_test, y_train, y_test
 
 
