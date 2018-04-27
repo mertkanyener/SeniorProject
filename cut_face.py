@@ -34,6 +34,9 @@ def cut_face(image_name):
     cv2.destroyAllWindows()
 
 
+
+
+
 def landmarks_lib(directory):
     for subdir, dirs, files in os.walk(directory):
         for file in files:
