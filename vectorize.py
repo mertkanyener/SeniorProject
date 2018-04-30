@@ -2,14 +2,15 @@ import numpy as np
 import cv2
 import dlib
 import os
+import sys
 
 from imutils import face_utils
+
 
 class Vectorize:
 
     def __init__(self, dataset=None):
         self.dataset = dataset
-
 
     def get_avg_size(self, dataset):
         x_values = []
@@ -59,8 +60,6 @@ class Vectorize:
         face_detector = dlib.get_frontal_face_detector()
         shape_predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 
-
-
         for group in dataset:
             count += 1
             for subdir, dirs, files in os.walk(group):
@@ -69,73 +68,72 @@ class Vectorize:
                     img = cv2.imread(img_name)
                     rectangles = face_detector(img, 1)
 
+                    shape = shape_predictor(img, rectangles[0])
+                    shape = face_utils.shape_to_np(shape)
+                    y1 = shape[25]
+                    y2 = shape[25]
+                    x1 = shape[18]
+                    x2 = shape[16]
+                    forehead = img[(y1[1] - 45):(y2[1] - 5), x1[0]:x2[0]]
+                    forehead_xvals.append(forehead.shape[1])
+                    forehead_yvals.append(forehead.shape[0])
+                    X_forehead.append(forehead)
 
-                    for (j, rectangle) in enumerate(rectangles):
-                        shape = shape_predictor(img, rectangle)
-                        shape = face_utils.shape_to_np(shape)
-                        y1 = shape[25]
-                        y2 = shape[25]
-                        x1 = shape[18]
-                        x2 = shape[16]
-                        forehead = img[(y1[1] - 45):(y2[1] - 5), x1[0]:x2[0]]
-                        forehead_xvals.append(forehead.shape[1])
-                        forehead_yvals.append(forehead.shape[0])
-                        X_forehead.append(forehead)
 
-                        y1 = shape[18]
-                        y2 = shape[30]
-                        x1 = shape[1]
-                        x2 = shape[37]
-                        reye_side = img[y1[1]:y2[1], x1[0]:x2[0]]
-                        reye_side_xvals.append(reye_side.shape[1])
-                        reye_side_yvals.append(reye_side.shape[0])
-                        X_reye_side.append(reye_side)
+                    y1 = shape[18]
+                    y2 = shape[30]
+                    x1 = shape[1]
+                    x2 = shape[37]
+                    reye_side = img[y1[1]:y2[1], x1[0]:x2[0]]
+                    reye_side_xvals.append(reye_side.shape[1])
+                    reye_side_yvals.append(reye_side.shape[0])
+                    X_reye_side.append(reye_side)
 
-                        y1 = shape[27]
-                        y2 = shape[30]
-                        x1 = shape[46]
-                        x2 = shape[16]
-                        leye_side = img[y1[1]:y2[1], x1[0]:x2[0]]
+                    y1 = shape[27]
+                    y2 = shape[30]
+                    x1 = shape[46]
+                    x2 = shape[16]
+                    leye_side = img[y1[1]:y2[1], x1[0]:x2[0]]
 
-                        leye_side_xvals.append(leye_side.shape[1])
-                        leye_side_yvals.append(leye_side.shape[0])
-                        X_leye_side.append(leye_side)
+                    leye_side_xvals.append(leye_side.shape[1])
+                    leye_side_yvals.append(leye_side.shape[0])
+                    X_leye_side.append(leye_side)
 
-                        y1 = shape[42]
-                        y2 = shape[30]
-                        x1 = shape[37]
-                        x2 = shape[40]
-                        reye_under = img[y1[1]:y2[1], x1[0]:x2[0]]
-                        reye_under_xvals.append(reye_under.shape[1])
-                        reye_under_yvals.append(reye_under.shape[0])
-                        X_reye_under.append(reye_under)
+                    y1 = shape[42]
+                    y2 = shape[30]
+                    x1 = shape[37]
+                    x2 = shape[40]
+                    reye_under = img[y1[1]:y2[1], x1[0]:x2[0]]
+                    reye_under_xvals.append(reye_under.shape[1])
+                    reye_under_yvals.append(reye_under.shape[0])
+                    X_reye_under.append(reye_under)
 
-                        y1 = shape[47]
-                        y2 = shape[30]
-                        x1 = shape[43]
-                        x2 = shape[46]
-                        leye_under = img[y1[1]:y2[1], x1[0]:x2[0]]
-                        leye_under_xvals.append(leye_under.shape[1])
-                        leye_under_yvals.append(leye_under.shape[0])
-                        X_leye_under.append(leye_under)
+                    y1 = shape[47]
+                    y2 = shape[30]
+                    x1 = shape[43]
+                    x2 = shape[46]
+                    leye_under = img[y1[1]:y2[1], x1[0]:x2[0]]
+                    leye_under_xvals.append(leye_under.shape[1])
+                    leye_under_yvals.append(leye_under.shape[0])
+                    X_leye_under.append(leye_under)
 
-                        y1 = shape[34]
-                        y2 = shape[6]
-                        x1 = shape[6]
-                        x2 = shape[49]
-                        mouth_right = img[y1[1]:y2[1], x1[0]:x2[0]]
-                        rmouth_xvals.append(mouth_right.shape[1])
-                        rmouth_yvals.append(mouth_right.shape[0])
-                        X_mouth_right.append(mouth_right)
+                    y1 = shape[34]
+                    y2 = shape[6]
+                    x1 = shape[6]
+                    x2 = shape[49]
+                    mouth_right = img[y1[1]:y2[1], x1[0]:x2[0]]
+                    rmouth_xvals.append(mouth_right.shape[1])
+                    rmouth_yvals.append(mouth_right.shape[0])
+                    X_mouth_right.append(mouth_right)
 
-                        y1 = shape[34]
-                        y2 = shape[12]
-                        x1 = shape[55]
-                        x2 = shape[12]
-                        mouth_left = img[y1[1]:y2[1], x1[0]:x2[0]]
-                        lmouth_xvals.append(mouth_left.shape[1])
-                        lmouth_yvals.append(mouth_left.shape[0])
-                        X_mouth_left.append(mouth_left)
+                    y1 = shape[34]
+                    y2 = shape[12]
+                    x1 = shape[55]
+                    x2 = shape[12]
+                    mouth_left = img[y1[1]:y2[1], x1[0]:x2[0]]
+                    lmouth_xvals.append(mouth_left.shape[1])
+                    lmouth_yvals.append(mouth_left.shape[0])
+                    X_mouth_left.append(mouth_left)
 
                     img = cv2.resize(img, (x_mean, y_mean))
                     img_v = np.matrix.flatten(img)  # vectorizing matrix
@@ -172,6 +170,7 @@ class Vectorize:
         xlunder_mean, ylunder_mean = int(np.mean(leye_under_xvals)), int(np.mean(leye_under_yvals))
         xrmouth_mean, yrmouth_mean = int(np.mean(rmouth_xvals)), int(np.mean(rmouth_yvals))
         xlmouth_mean, ylmouth_mean = int(np.mean(lmouth_xvals)), int(np.mean(lmouth_yvals))
+
         for i in range(len(X_forehead)):
             X_forehead[i] = cv2.resize(X_forehead[i], (xfore_mean, yfore_mean))
             X_forehead[i] = np.matrix.flatten(X_forehead[i])
@@ -190,12 +189,11 @@ class Vectorize:
 
         X_age = np.matrix([X_forehead, X_reye_side, X_leye_side, X_reye_under, X_leye_under, X_mouth_right, X_mouth_left])
         X_age = np.transpose(X_age)
+
         return X, X_age , y_gender, y_age
         # arr = np.array([age18_29_f, age18_29_m, age30_49_f, age30_49_m, age50_69_f, age50_69_m, age70_94_f, age70_94_m])
 
         # X = arr.reshape(4, 2)  #result matrix 4 rows for 4 age groups, 2 cols for genders
-
-
 
     def padding(self, X):
         X_padded = []
