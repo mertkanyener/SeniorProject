@@ -6,7 +6,7 @@ import sys
 
 from imutils import face_utils
 
-
+#deneme
 class Vectorize:
 
     def __init__(self, dataset=None):
