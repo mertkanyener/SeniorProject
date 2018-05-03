@@ -7,8 +7,7 @@ class Knn:
     def __init__(self, neighbors=None):
         self.neighbors = neighbors
 
-    def run_knn(self, split_data, neighbors=5):
-        X_train, X_test, y_train, y_test = split_data
+    def run_knn(self, X_train, X_test, y_train, y_test, neighbors=5):
         knn = KNeighborsClassifier(n_neighbors=neighbors)
         knn.fit(X_train, y_train)
         y_pred = knn.predict(X_test)

@@ -8,8 +8,7 @@ class RandomForest:
         self.n_estimators = n_estimators
         self.criteron = criteron
 
-    def run_forest(self, split_data, n_estimators=128, criterion='gini'):
-        X_train, X_test, y_train, y_test = split_data
+    def run_forest(self, X_train, X_test, y_train, y_test, n_estimators=128, criterion='gini'):
         accuracy = Accuracy()
         forest = RandomForestClassifier(criterion=criterion,
                                         n_estimators=n_estimators,

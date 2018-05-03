@@ -26,6 +26,7 @@ class Vectorize:
 
     def vectorize(self, dataset, x_mean, y_mean):
         X = []
+        X_age = []
         X_forehead = []
         X_reye_side = []
         X_leye_side = []
@@ -66,10 +67,13 @@ class Vectorize:
                 for file in files:
                     img_name = os.path.join(subdir, file)
                     img = cv2.imread(img_name)
+
+
                     rectangles = face_detector(img, 1)
 
                     shape = shape_predictor(img, rectangles[0])
                     shape = face_utils.shape_to_np(shape)
+
                     y1 = shape[25]
                     y2 = shape[25]
                     x1 = shape[18]
@@ -89,6 +93,7 @@ class Vectorize:
                     reye_side_yvals.append(reye_side.shape[0])
                     X_reye_side.append(reye_side)
 
+                    
                     y1 = shape[27]
                     y2 = shape[30]
                     x1 = shape[46]
@@ -165,17 +170,21 @@ class Vectorize:
 
         xfore_mean, yfore_mean = int(np.mean(forehead_xvals)), int(np.mean(forehead_yvals))
         xrside_mean, yrside_mean = int(np.mean(reye_side_xvals)), int(np.mean(reye_side_yvals))
+
         xlside_mean, ylside_mean = int(np.mean(leye_side_xvals)), int(np.mean(leye_side_yvals))
         xrunder_mean, yrunder_mean = int(np.mean(reye_under_xvals)), int(np.mean(reye_under_yvals))
         xlunder_mean, ylunder_mean = int(np.mean(leye_under_xvals)), int(np.mean(leye_under_yvals))
         xrmouth_mean, yrmouth_mean = int(np.mean(rmouth_xvals)), int(np.mean(rmouth_yvals))
         xlmouth_mean, ylmouth_mean = int(np.mean(lmouth_xvals)), int(np.mean(lmouth_yvals))
 
-        for i in range(len(X_forehead)):
+        for i in range(len(X_reye_side)):
+
             X_forehead[i] = cv2.resize(X_forehead[i], (xfore_mean, yfore_mean))
             X_forehead[i] = np.matrix.flatten(X_forehead[i])
+
             X_reye_side[i] = cv2.resize(X_reye_side[i], (xrside_mean, yrside_mean))
             X_reye_side[i] = np.matrix.flatten(X_reye_side[i])
+
             X_leye_side[i] = cv2.resize(X_leye_side[i], (xlside_mean, ylside_mean))
             X_leye_side[i] = np.matrix.flatten(X_leye_side[i])
             X_reye_under[i] = cv2.resize(X_reye_under[i], (xrunder_mean, yrunder_mean))
@@ -186,9 +195,13 @@ class Vectorize:
             X_mouth_right[i] = np.matrix.flatten(X_mouth_right[i])
             X_mouth_left[i] = cv2.resize(X_mouth_left[i], (xlmouth_mean, ylmouth_mean))
             X_mouth_left[i] = np.matrix.flatten(X_mouth_left[i])
+            X_age.append(np.concatenate((X_forehead[i], X_reye_side[i], X_leye_side[i],
+                                         X_reye_under[i], X_leye_under[i], X_mouth_right[i], X_mouth_left[i])))
 
-        X_age = np.matrix([X_forehead, X_reye_side, X_leye_side, X_reye_under, X_leye_under, X_mouth_right, X_mouth_left])
-        X_age = np.transpose(X_age)
+
+
+
+
 
         return X, X_age , y_gender, y_age
         # arr = np.array([age18_29_f, age18_29_m, age30_49_f, age30_49_m, age50_69_f, age50_69_m, age70_94_f, age70_94_m])

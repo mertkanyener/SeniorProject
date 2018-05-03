@@ -1,7 +1,9 @@
 import numpy as np
 
 from vectorize import Vectorize
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.linear_model import LogisticRegression
+
 from svm import SVM
 from forest import RandomForest
 from regression import LogRegression
@@ -17,10 +19,17 @@ dir5 = "/home/mertkanyener/Desktop/Uni/Senior project/Dataset/BW_age_50-69_Neutr
 dir6 = "/home/mertkanyener/Desktop/Uni/Senior project/Dataset/BW_age_50-69_Neutral_bmp/male"
 dir7 = "/home/mertkanyener/Desktop/Uni/Senior project/Dataset/BW_age_70-94_Neutral_bmp/female"
 dir8 = "/home/mertkanyener/Desktop/Uni/Senior project/Dataset/BW_age_70-94_Neutral_bmp/male"
-dataset = [dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8]
 
-
-
+dir1_g = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_18-29_Neutral_bmp/female"
+dir2_g = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_18-29_Neutral_bmp/male"
+dir3_g = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_30-49_Neutral_bmp/female"
+dir4_g = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_30-49_Neutral_bmp/male"
+dir5_g = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_50-69_Neutral_bmp/female"
+dir6_g = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_50-69_Neutral_bmp/male"
+dir7_g = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_70-94_Neutral_bmp/female"
+dir8_g = "/home/mertkanyener/Desktop/Uni/Senior project/dataset_cut/BW_age_70-94_Neutral_bmp/male"
+dataset_age = [dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8]
+dataset_gender = [dir1_g, dir2_g, dir3_g, dir4_g, dir5_g, dir6_g, dir7_g, dir8_g]
 
 def preprocessing(dataset, option):
     vectorize = Vectorize()
@@ -30,10 +39,10 @@ def preprocessing(dataset, option):
     #X_padded = vectorize.padding(X)
     if option == 'gender':
         X_train, X_test, y_train, y_test = train_test_split(X, y_gender, random_state=1,
-                                                            test_size=0.33, stratify=y_gender)
+                                                            test_size=0.2, stratify=y_gender)
         return X_train, X_test, y_train, y_test
     elif option == 'age':
-        X_train, X_test, y_train, y_test = train_test_split(X_age, y_age, random_state=1, test_size=0.33,
+        X_train, X_test, y_train, y_test = train_test_split(X_age, y_age, random_state=1, test_size=0.2,
                                                             stratify=y_age)
         return X_train, X_test, y_train, y_test
     else:
@@ -41,15 +50,40 @@ def preprocessing(dataset, option):
         return 0
 
 
+
+
+
 svm = SVM()
 knn = Knn()
 forest = RandomForest()
 lr = LogRegression()
-split_data = preprocessing(dataset, 'age')
+X_train, X_test, y_train, y_test = preprocessing(dataset_age, 'age')
 
-svm.run_svm(split_data)
-knn.run_knn(split_data)
-forest.run_forest(split_data)
-lr.run_lr(split_data)
+
+
+
+svm.run_svm(X_train, X_test, y_train, y_test)
+knn.run_knn(X_train, X_test, y_train, y_test)
+forest.run_forest(X_train, X_test, y_train, y_test)
+lr.run_lr(X_train, X_test, y_train, y_test)
+
+"""
+kfold = StratifiedKFold(n_splits=10, random_state=1).split(X_train, y_train)
+scores = []
+
+X_train = np.asanyarray(X_train)
+print(type(X_train))
+
+for k, (train, test) in enumerate(kfold):
+    print("Train:",train)
+    print(test)
+    lr = LogisticRegression()
+    lr.fit(X_train[train], y_train[train])
+    score = lr.score(X_train[test], y_train[test])
+    scores.append(score)
+
+
+print('Log reg kfold Accuracy: %', np.mean(scores))
+"""
 
 
